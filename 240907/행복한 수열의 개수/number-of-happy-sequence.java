@@ -29,14 +29,15 @@ public class Main {
 			int cnt = 1;
 			for (int j = 1; j < n; j++) {
 				if (cur == temp[j]) {
-					if (++cnt == m) {
-						answer++;
-						break;
-					}
+					cnt++;
 				}
 				else {
 					cur = temp[j];
 					cnt = 1;
+				}
+				if (cnt >= m) {
+					answer++;
+					break;
 				}
 			}
 		}
@@ -50,14 +51,15 @@ public class Main {
 			int cnt = 1;
 			for (int j = 1; j < n; j++) {
 				if (cur == temp[j]) {
-					if (++cnt == m) {
-						answer++;
-						break;
-					}
+					cnt++;
 				}
 				else {
 					cur = temp[j];
 					cnt = 1;
+				}
+				if (cnt >= m) {
+					answer++;
+					break;
 				}
 			}
 		}
