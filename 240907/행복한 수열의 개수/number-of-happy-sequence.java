@@ -25,9 +25,9 @@ public class Main {
 				temp[j] = arr[i][j];
 			}
 			
-			int cur = temp[0];
-			int cnt = 1;
-			for (int j = 1; j < n; j++) {
+			int cur = -1;
+			int cnt = 0;
+			for (int j = 0; j < n; j++) {
 				if (cur == temp[j]) {
 					cnt++;
 				}
@@ -47,9 +47,9 @@ public class Main {
 				temp[j] = arr[j][i];
 			}
 			
-			int cur = temp[0];
-			int cnt = 1;
-			for (int j = 1; j < n; j++) {
+			int cur = -1;
+			int cnt = 0;
+			for (int j = 0; j < n; j++) {
 				if (cur == temp[j]) {
 					cnt++;
 				}
