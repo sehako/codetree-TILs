@@ -1,6 +1,13 @@
 import java.util.*;
 import java.io.*;
-
+/*
+5 5
+0 0 0 0 0
+0 1 0 0 0
+0 0 1 0 1
+0 0 0 0 0
+0 0 0 1 0
+ */
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,7 +29,7 @@ public class Main {
         int answer = 0;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
-                for (int k = 0; k <= n / 2 + 1; k++) {
+                for (int k = 0; k <= n; k++) {
                     int result = digGold(map, i, j, k);
                     int cost = k * k + (k + 1) * (k + 1);
                     if (cost <= result * m) answer = Math.max(answer, result);
