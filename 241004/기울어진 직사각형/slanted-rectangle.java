@@ -4,6 +4,7 @@ import java.util.*;
 public class Main {
     static int answer, N;
     static int[][] arr;
+    static boolean[][] check;
     static int[] dr = {-1, -1, 1, 1}, dc = {1, -1, -1, 1};
 
     public static void main(String[] args) throws IOException {
@@ -12,6 +13,7 @@ public class Main {
         N = Integer.parseInt(br.readLine());
 
         arr = new int[N][N];
+        check = new boolean[N][N];
         for (int i = 0; i < N; i++) {
             st = new StringTokenizer(br.readLine(), " ");
             for (int j = 0; j < N; j++) {
@@ -30,18 +32,19 @@ public class Main {
     }
 
     static void sum(int[] start, int[] cur, int dir, int count, int sum) {
-        if (count >= 3 && start[0] == cur[0] && start[1] == cur[1]) {
+        if (count > 3 && start[0] == cur[0] && start[1] == cur[1]) {
             answer = Math.max(answer, sum);
             return;
         }
-
 
         int nr, nc;
         for (int i = dir; i < 4; i++) {
             nr = cur[0] + dr[i];
             nc = cur[1] + dc[i];
-            if (nr >= 0 && nr < N && nc >= 0 && nc < N) {
+            if (nr >= 0 && nr < N && nc >= 0 && nc < N && !check[nr][nc]) {
+                check[nr][nc] = true;
                 sum(start, new int[] {nr, nc}, i, count + 1, sum + arr[nr][nc]);
+                check[nr][nc] = false;
             }
         }
 
