@@ -59,7 +59,7 @@ public class Main {
         for (int i = 1; i <= 3; i++) {
             for (int j = 1; j <= 3; j++) {
                 for (int k = 0; k < 4; k++) {
-                    rotate(i, j);
+                    rotate(i, j, 0);
                     if (k == 3) continue;
                     tempValue = getValue();
                     if ((cost == 0 && tempValue != -1) || cost < tempValue) {
@@ -88,7 +88,7 @@ public class Main {
         }
 
         if (cost != 0) {
-            rotate(rotatePos[0], rotatePos[1]);
+            rotate(rotatePos[0], rotatePos[1], rotatePos[2]);
             return true;
         }
         return false;
@@ -149,7 +149,7 @@ public class Main {
         }
     }
 
-    static void rotate(int r, int c) {
+    static void rotate(int r, int c, int degree) {
 
         int[] temp = new int[8];
 
@@ -161,7 +161,10 @@ public class Main {
             col += dc[pos];
         }
 
-        int idx = 6;
+        int idx;
+        if (degree == 0) idx = 6;
+        else if (degree == 1) idx = 4;
+        else idx = 2;
         row = r - 1;
         col = c - 1;
         pos = 0;
