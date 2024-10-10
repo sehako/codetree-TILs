@@ -28,27 +28,23 @@ public class Main {
         for (int i = 0; i < M; i++) spare[i] = Integer.parseInt(st.nextToken());
 
         int turn = 0, answer, temp, count;
-        int[][] rotateArray;
         StringBuilder sb = new StringBuilder();
         while (turn++ < K) {
-            rotateArray = getArray();
-
-            if (rotateArray == null) break;
+            if (!rotateArray()) break;
 
             answer = 0;
             count = 0;
             while (true) {
-                temp = getValue(rotateArray);
+                temp = getValue();
 
                 if (temp == -1) break;
                 answer += temp;
-                fillTreasure(rotateArray);
+                fillTreasure();
                 count++;
             }
 
             if (count == 0) break;
 
-            map = rotateArray;
             sb.append(answer).append(' ');
         }
 
@@ -56,15 +52,16 @@ public class Main {
     }
 
 
-    static int[][] getArray() {
+    static boolean rotateArray() {
         int[] rotatePos = new int[3];
         int cost = 0;
         int tempValue;
-        for (int i = 1; i < 3; i++) {
-            for (int j = 1; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    int[][] temp = rotate(i, j, k);
-                    tempValue = getValue(temp);
+        for (int i = 1; i <= 3; i++) {
+            for (int j = 1; j <= 3; j++) {
+                for (int k = 0; k < 4; k++) {
+                    rotate(i, j);
+                    if (k == 3) continue;
+                    tempValue = getValue();
                     if ((cost == 0 && tempValue != -1) || cost < tempValue) {
                         rotatePos[0] = i;
                         rotatePos[1] = j;
@@ -76,9 +73,13 @@ public class Main {
                             rotatePos[1] = j;
                             rotatePos[2] = k;
                         } else if (k == rotatePos[2]) {
-                            if (j < rotatePos[1] || i < rotatePos[0]) {
+                            if (j < rotatePos[1]) {
                                 rotatePos[0] = i;
                                 rotatePos[1] = j;
+                            } else if (j == rotatePos[1]) {
+                                if (i < rotatePos[0]) {
+                                    rotatePos[0] = i;
+                                }
                             }
                         }
                     }
@@ -86,18 +87,21 @@ public class Main {
             }
         }
 
-        if (cost == 0) return null;
-        return rotate(rotatePos[0], rotatePos[1], rotatePos[2]);
+        if (cost != 0) {
+            rotate(rotatePos[0], rotatePos[1]);
+            return true;
+        }
+        return false;
     }
 
-    static int getValue(int[][] arr) {
+    static int getValue() {
         check = new boolean[5][5];
         int count = 0;
         for (int r = 0; r < 5; r++) {
             for (int c = 0; c < 5; c++) {
                 if (!check[r][c]) {
                     check[r][c] = true;
-                    if (!find(arr, r, c, arr[r][c], 1)) check[r][c] = false;
+                    if (!find(r, c, map[r][c], 1)) check[r][c] = false;
                     else count++;
                 }
             }
@@ -107,7 +111,7 @@ public class Main {
         return -1;
     }
 
-    static boolean find(int[][] arr, int r, int c, int num, int count) {
+    static boolean find(int r, int c, int num, int count) {
         boolean result = count >= 3;
 
         for (int i = 0; i < 4; i++) {
@@ -115,10 +119,10 @@ public class Main {
             int nc = c + dc[i];
 
             if (nr < 0 || nr >= 5 || nc < 0 || nc >= 5) continue;
-            if (check[nr][nc] || arr[nr][nc] != num) continue;
+            if (check[nr][nc] || map[nr][nc] != num) continue;
 
             check[nr][nc] = true;
-            result = find(arr, nr, nc, num, count + 1);
+            result = find(nr, nc, num, count + 1);
 
             if (!result) check[nr][nc] = false;
         }
@@ -137,18 +141,15 @@ public class Main {
         return count;
     }
 
-    static void fillTreasure(int[][] arr) {
+    static void fillTreasure() {
         for (int c = 0; c < 5; c++) {
             for (int r = 4; r >= 0; r--) {
-                if (check[r][c]) arr[r][c] = spare[treasureIdx++];
+                if (check[r][c]) map[r][c] = spare[treasureIdx++];
             }
         }
     }
 
-    static int[][] rotate(int r, int c, int count) {
-        int[][] result = new int[5][5];
-
-        for (int i = 0; i < 5; i++) result[i] = Arrays.copyOf(map[i], 5);
+    static void rotate(int r, int c) {
 
         int[] temp = new int[8];
 
@@ -160,22 +161,16 @@ public class Main {
             col += dc[pos];
         }
 
-        int idx;
-        if (count == 0) idx = 6;
-        else if (count == 1) idx = 4;
-        else idx = 2;
+        int idx = 6;
         row = r - 1;
         col = c - 1;
         pos = 0;
         for (int i = 0; i < 8; i++) {
             if (i > 0 && i % 2 == 0) pos++;
-            result[row][col] = temp[idx % 8];
+            map[row][col] = temp[idx % 8];
             row += dr[pos];
             col += dc[pos];
             idx = (idx + 1) % 8;
         }
-
-        return result;
     }
-
 }
