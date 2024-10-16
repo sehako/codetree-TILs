@@ -86,33 +86,36 @@ public class Main {
     static int findDir(Unit rudolf, List<Unit> santaList) {
         double orgDist = Double.MAX_VALUE;
         int dirIdx = 0;
-        Unit targetSanta = new Unit(0, 0, 0);
+        Unit targetSanta = new Unit(-100, 51, 51);
         int nr, nc;
         for (Unit santa : santaList) {
         	if (santa.knockDown > 1000) continue;
-            for (int i = 0; i < 8; i++) {
-                nr = rudolf.r + dir[i][0];
-                nc = rudolf.c + dir[i][1];
+        	
+            double dist = getDist(rudolf.r, rudolf.c, santa.r, santa.c);
 
-                if (isImpossible(nr, nc)) continue;
+            if (orgDist > dist) {
+                orgDist = dist;
+                targetSanta = santa;
+            }
 
-                double dist = getDist(nr, nc, santa.r, santa.c);
-
-                if (orgDist > dist) {
-                    orgDist = dist;
-                    dirIdx = i;
+            if (orgDist == dist) {
+                if (targetSanta.r < santa.r) {
+                    targetSanta = santa;
+                } else if (targetSanta.r == santa.r && targetSanta.c < santa.c) {
                     targetSanta = santa;
                 }
+            }
+        }
+        
+        for (int i = 0; i < 8; i++) {
+            nr = rudolf.r + dir[i][0];
+            nc = rudolf.c + dir[i][1];
 
-                if (orgDist == dist) {
-                    if (targetSanta.r < santa.r) {
-                        dirIdx = i;
-                        targetSanta = santa;
-                    } else if (targetSanta.r == santa.r && targetSanta.c < santa.c) {
-                        dirIdx = i;
-                        targetSanta = santa;
-                    }
-                }
+            if (isImpossible(nr, nc)) continue;
+            double dist = getDist(nr, nc, targetSanta.r, targetSanta.c);
+            if (orgDist > dist) {
+                orgDist = dist;
+                dirIdx = i;
             }
         }
 
